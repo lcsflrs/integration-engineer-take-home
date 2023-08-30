@@ -11,6 +11,7 @@ export default {
       boxShadow: {
         purple: "0 0 3px 3px #646cff50",
         white: "0 0 3px 3px #ffffff50",
+        green: "0 0 3px 3px #00ff0030",
       },
     },
   },
