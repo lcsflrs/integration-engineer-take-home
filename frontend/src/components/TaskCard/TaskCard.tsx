@@ -22,6 +22,7 @@ const TaskCard = ({ task, onDelete, onDone }: TaskCardProps) => {
 
         <BaseButton
           onClick={() => onDone(task.id)}
+          className="bg-green-700 hover:bg-green-600 hover:shadow-green"
           text={task.done ? "Undo" : "Done"}
         />
       </div>
