@@ -1,11 +1,28 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
+import { FieldValues, useForm } from "react-hook-form";
+import * as yup from "yup";
 import { ITask } from "./@types";
 import BaseButton from "./components/Buttons/BaseButton";
 import TaskCard from "./components/TaskCard/TaskCard";
 
 function App() {
   const [tasks, setTasks] = useState<ITask[]>([]);
-  const [formData, setFormData] = useState({ title: "", description: "" });
+
+  const createTaskSchema = yup.object().shape({
+    title: yup.string().required("Title is required"),
+    description: yup.string().required("Description is required"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setError,
+  } = useForm({
+    resolver: yupResolver(createTaskSchema),
+  });
 
   useEffect(() => {
     fetchTasks();
@@ -18,10 +35,50 @@ function App() {
   };
 
   /* Complete the following functions to hit endpoints on your server */
-  const createTask = async () => {};
+  const createTask = async (values: FieldValues) => {
+    try {
+      const response = await fetch("http://localhost:8000/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (response.status === 400) {
+        const errorData = await response.json();
+
+        if (errorData.type === "MissingFields") {
+          errorData.missingFields.forEach((field: "title" | "description") => {
+            setError(field, {
+              type: "manual",
+              message: `${
+                field.substring(0, 1).toUpperCase() + field.substring(1)
+              } is required`,
+            });
+          });
+
+          return;
+        }
+        return;
+      }
+
+      const tasks = await response.json();
+      setTasks(tasks);
+      reset();
+    } catch (err) {
+      console.log("\n\nVeio para o Catch\n\n");
+      console.log(err);
+    }
+  };
 
   const handleDelete = async (id: number) => {
-    console.log("delete", id);
+    const response = await fetch(`http://localhost:8000/tasks/${id}`, {
+      method: "DELETE",
+    });
+
+    const tasks = await response.json();
+    setTasks(tasks);
   };
 
   const handleDone = async (id: number) => {
@@ -29,40 +86,48 @@ function App() {
   };
 
   return (
-    <div className=" w-full mx-auto max-w-2xl px-4">
+    <div className="w-full max-w-2xl px-4 mx-auto ">
       <h1 className="mt-16 text-4xl font-bold text-center">
         Task Management App
       </h1>
 
-      <div className="mt-16 flex flex-col items-center">
-        <h2 className="text-xl ">Create Task</h2>
-        <div className="flex mt-4 flex-col gap-2 md:flex-row md:gap-0">
-          <input
-            type="text"
-            placeholder="Title"
-            className="px-4 md:rounded-none md:rounded-l-lg py-2 rounded"
-            value={formData.title}
-            onChange={(e) =>
-              setFormData({ ...formData, title: e.target.value })
-            }
-          />
-          <span className="p-4 bg-brand-gray-1 opacity-70 hidden md:block "></span>
-          <input
-            type="text"
-            className="px-4 md:rounded-none py-2 rounded"
-            placeholder="Description"
-            value={formData.description}
-            onChange={(e) =>
-              setFormData({ ...formData, description: e.target.value })
-            }
-          />
-          <BaseButton
-            onClick={createTask}
-            text="Create"
-            className="md:rounded-l-none"
-          />
+      <form onSubmit={handleSubmit(createTask)}>
+        <div className="flex flex-col items-center mt-16">
+          <h2 className="text-xl ">Create Task</h2>
+          <div className="flex flex-col gap-2 mt-4 md:flex-row md:gap-0">
+            <div>
+              <input
+                type="text"
+                placeholder="Title"
+                className="px-4 py-2 rounded md:rounded-none md:rounded-l-lg"
+                {...register("title", { required: true })}
+              />
+
+              <p className="mt-2 text-sm text-red-600">
+                {`${errors[`title`]?.message ?? ``}`}
+              </p>
+            </div>
+
+            <span className="hidden p-4 bg-brand-gray-1 opacity-70 max-h-10 md:block "></span>
+            <div>
+              <input
+                type="text"
+                className="px-4 py-2 rounded md:rounded-none"
+                placeholder="Description"
+                {...register("description", { required: true })}
+              />
+              <p className="mt-2 text-sm text-red-600">
+                {`${errors[`description`]?.message ?? ``}`}
+              </p>
+            </div>
+            <BaseButton
+              onClick={() => null}
+              text="Create"
+              className="md:rounded-l-none md:max-h-10"
+            />
+          </div>
         </div>
-      </div>
+      </form>
 
       <ul className="flex flex-col gap-2 mt-4">
         {tasks.map((task) => (
