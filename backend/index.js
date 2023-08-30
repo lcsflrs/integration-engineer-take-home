@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const app = express();
+const cors = require("cors");
+
 const PORT = process.env.PORT || 8000;
 
 const validateRequestBody = require("./utils/validateRequestBody");
@@ -9,6 +11,11 @@ const getTasksService = require("./useCases/Task/getTasks/getTasksService");
 const addTaskService = require("./useCases/Task/addTask/addTaskService");
 const deleteTaskService = require("./useCases/Task/deleteTask/deleteTaskService");
 
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(bodyParser.json());
 
 let tasks = [];
