@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 8000;
 const validateRequestBody = require("./utils/validateRequestBody");
 const getTasksService = require("./useCases/Task/getTasks/getTasksService");
 const addTaskService = require("./useCases/Task/addTask/addTaskService");
+const deleteTaskService = require("./useCases/Task/deleteTask/deleteTaskService");
 
 app.use(bodyParser.json());
 
@@ -54,7 +55,14 @@ app.post("/tasks", (req, res) => {
   }
 });
 
-app.delete("/tasks/:id", (req, res) => {});
+app.delete("/tasks/:id", (req, res) => {
+  tasks = deleteTaskService({
+    tasks,
+    taskId: parseInt(req.params.id),
+  });
+
+  res.json(tasks);
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
