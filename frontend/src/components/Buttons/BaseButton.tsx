@@ -1,11 +1,12 @@
 import { twMerge } from "tailwind-merge";
 
-interface BaseButtonProps {
+interface BaseButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
   onClick: () => void;
   className?: string;
 }
-const BaseButton = ({ onClick, text, className }: BaseButtonProps) => {
+const BaseButton = ({ onClick, text, className, ...rest }: BaseButtonProps) => {
   return (
     <button
       className={twMerge(
@@ -13,6 +14,7 @@ const BaseButton = ({ onClick, text, className }: BaseButtonProps) => {
         className
       )}
       onClick={onClick}
+      {...rest}
     >
       {text}
     </button>
