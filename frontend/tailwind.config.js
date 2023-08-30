@@ -1,8 +1,18 @@
 /** @type {import('tailwindcss').Config} */
+
 export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "brand-gray-1": "#3B3B3B",
+        "brand-purple": "#646cff",
+      },
+      boxShadow: {
+        purple: "0 0 3px 3px #646cff50",
+        white: "0 0 3px 3px #ffffff50",
+      },
+    },
   },
   plugins: [],
 };
