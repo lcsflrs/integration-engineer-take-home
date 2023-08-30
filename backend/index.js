@@ -4,25 +4,54 @@ const bodyParser = require("body-parser");
 const app = express();
 const PORT = process.env.PORT || 8000;
 
+const validateRequestBody = require("./utils/validateRequestBody");
+const getTasksService = require("./useCases/Task/getTasks/getTasksService");
+const addTaskService = require("./useCases/Task/addTask/addTaskService");
+
 app.use(bodyParser.json());
 
 let tasks = [];
 let nextTaskId = 1;
 
 app.get("/tasks", (req, res) => {
-  res.json(tasks);
+  const returnTasks = getTasksService(tasks);
+  res.json(returnTasks);
 });
 
 app.post("/tasks", (req, res) => {
-  validateRequestBody(req.body, ["title", "description"]);
-  const newTask = {
-    id: nextTaskId,
-    title: req.body.title,
-    description: req.body.description,
-  };
-  tasks.push(newTask);
-  nextTaskId++;
-  res.json(newTask);
+  try {
+    const missingFields = validateRequestBody(req.body, [
+      "title",
+      "description",
+    ]);
+
+    if (missingFields.length > 0) {
+      res.status(400).json({
+        type: "MissingFields",
+        message: `Missing fields: ${missingFields.join(", ")}`,
+        missingFields,
+      });
+
+      return;
+    }
+
+    const dto = {
+      body: req.body,
+      nextTaskId,
+      tasks,
+    };
+
+    const { tasks: newTasks, nextTaskId: newNextTaskId } = addTaskService(dto);
+
+    tasks = newTasks;
+    nextTaskId = newNextTaskId;
+
+    res.json(tasks);
+  } catch (err) {
+    res.status(400).json({
+      message: err.message,
+    });
+  }
 });
 
 app.delete("/tasks/:id", (req, res) => {});
