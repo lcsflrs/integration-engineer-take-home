@@ -14,6 +14,7 @@ const addTaskService = (dto) => {
     id: dto.nextTaskId,
     title: dto.body.title,
     description: dto.body.description,
+    done: false,
   };
 
   dto.tasks.push(newTask);
