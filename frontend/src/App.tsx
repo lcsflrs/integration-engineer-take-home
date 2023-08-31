@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { ITask } from "./@types";
@@ -24,17 +24,16 @@ function App() {
     resolver: yupResolver(createTaskSchema),
   });
 
+  const fetchTasks = useCallback(async () => {
+    const response = await fetch("http://localhost:8000/tasks");
+    const tasks = await response.json();
+    setTasks(tasks);
+  }, []);
+
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  const fetchTasks = async () => {
-    const response = await fetch("http://localhost:8000/tasks");
-    const tasks = await response.json();
-    setTasks(tasks);
-  };
-
-  /* Complete the following functions to hit endpoints on your server */
   const createTask = async (values: FieldValues) => {
     try {
       const response = await fetch("http://localhost:8000/tasks", {
@@ -60,15 +59,22 @@ function App() {
 
           return;
         }
-        return;
+
+        throw new Error("Something went wrong.");
       }
 
       const tasks = await response.json();
       setTasks(tasks);
       reset();
     } catch (err) {
-      console.log("\n\nVeio para o Catch\n\n");
-      console.log(err);
+      setError("title", {
+        type: "manual",
+        message: "Something went wrong.",
+      });
+      setError("description", {
+        type: "manual",
+        message: "Please, try again.",
+      });
     }
   };
 
@@ -81,8 +87,13 @@ function App() {
     setTasks(tasks);
   };
 
-  const handleDone = async (id: number) => {
-    console.log("done", id);
+  const handleToggleDone = async (id: number) => {
+    const response = await fetch(`http://localhost:8000/tasks/${id}`, {
+      method: "PATCH",
+    });
+
+    const tasks = await response.json();
+    setTasks(tasks);
   };
 
   return (
@@ -132,7 +143,11 @@ function App() {
       <ul className="flex flex-col gap-2 mt-4">
         {tasks.map((task) => (
           <li key={task.id}>
-            <TaskCard task={task} onDelete={handleDelete} onDone={handleDone} />
+            <TaskCard
+              task={task}
+              onDelete={handleDelete}
+              onDone={handleToggleDone}
+            />
           </li>
         ))}
       </ul>
