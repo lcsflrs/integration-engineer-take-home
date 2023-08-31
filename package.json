@@ -1,0 +1,21 @@
+{
+  "name": "integration",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "concurrently \"yarn frontend test\" \"yarn backend test\"",
+    "frontend": "yarn workspace @integration/frontend",
+    "backend": "yarn workspace @integration/backend",
+    "build": "concurrently \"yarn frontend build\" \"yarn backend build\""
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.1"
+  }
+}

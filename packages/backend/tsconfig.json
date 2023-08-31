@@ -4,7 +4,8 @@
     "./dist",
     "__tests__",
     "jest.config.js",
-    "*.test.js"
+    "*.test.js",
+    "node_modules"
   ],
   "compilerOptions": {
     "target": "es2016",

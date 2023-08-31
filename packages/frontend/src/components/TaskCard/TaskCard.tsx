@@ -95,6 +95,7 @@ const TaskCard = memo(({ task, onDelete, onDone, setTasks }: TaskCardProps) => {
       {isEditing ? (
         <form onSubmit={handleSubmit(handleSave)} className="px-4 pt-4 ">
           <input
+            aria-label="title"
             className="w-full px-4 py-2 text-xl font-semibold rounded-lg"
             type="text"
             {...register("title")}
@@ -103,6 +104,7 @@ const TaskCard = memo(({ task, onDelete, onDone, setTasks }: TaskCardProps) => {
             {`${errors[`title`]?.message ?? ``}`}
           </p>
           <input
+            aria-label="description"
             className="w-full px-4 py-2 mt-2 rounded-lg"
             type="text"
             {...register("description")}
