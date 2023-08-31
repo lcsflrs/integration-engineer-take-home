@@ -29,4 +29,34 @@ describe("validateRequestBody", () => {
 
     expect(actual).toEqual(expected);
   });
+
+  it("should return a list of missing fields if the request body have empty strings", () => {
+    const body = {
+      title: "",
+      description: "",
+    };
+
+    const requiredFields = ["title", "description"];
+
+    const expected = ["title", "description"];
+
+    const actual = validateRequestBody(body, requiredFields);
+
+    expect(actual).toEqual(expected);
+  });
+
+  it("should return a list of missing fields if the request body haven't strings ", () => {
+    const body = {
+      title: 2,
+      description: true,
+    };
+
+    const requiredFields = ["title", "description"];
+
+    const expected = ["title", "description"];
+
+    const actual = validateRequestBody(body, requiredFields);
+
+    expect(actual).toEqual(expected);
+  });
 });
