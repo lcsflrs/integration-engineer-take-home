@@ -6,6 +6,8 @@ export default {
     extend: {
       colors: {
         "brand-gray-1": "#3B3B3B",
+        "brand-gray-2": "#2D2D2D",
+        "brand-gray-3": "#1F1F1F",
         "brand-purple": "#646cff",
       },
       boxShadow: {
