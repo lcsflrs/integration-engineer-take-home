@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { ITask } from "./@types";
@@ -24,13 +24,13 @@ function App() {
     resolver: yupResolver(createTaskSchema),
   });
 
-  const fetchTasks = useCallback(async () => {
-    const response = await fetch("http://localhost:8000/tasks");
-    const tasks = await response.json();
-    setTasks(tasks);
-  }, []);
-
   useEffect(() => {
+    const fetchTasks = async () => {
+      const response = await fetch("http://localhost:8000/tasks");
+      const tasks = await response.json();
+      setTasks(tasks);
+    };
+
     fetchTasks();
   }, []);
 
@@ -88,7 +88,7 @@ function App() {
   };
 
   const handleToggleDone = async (id: number) => {
-    const response = await fetch(`http://localhost:8000/tasks/${id}`, {
+    const response = await fetch(`http://localhost:8000/tasks/done/${id}`, {
       method: "PATCH",
     });
 
@@ -147,6 +147,7 @@ function App() {
               task={task}
               onDelete={handleDelete}
               onDone={handleToggleDone}
+              setTasks={setTasks}
             />
           </li>
         ))}
