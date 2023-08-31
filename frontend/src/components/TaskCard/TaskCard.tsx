@@ -103,7 +103,7 @@ const TaskCard = memo(({ task, onDelete, onDone, setTasks }: TaskCardProps) => {
             {`${errors[`title`]?.message ?? ``}`}
           </p>
           <input
-            className="w-full px-4 py-2 mt-2 font-semibold rounded-lg"
+            className="w-full px-4 py-2 mt-2 rounded-lg"
             type="text"
             {...register("description")}
           />
