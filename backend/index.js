@@ -11,6 +11,7 @@ const getTasksService = require("./useCases/Task/getTasks/getTasksService");
 const addTaskService = require("./useCases/Task/addTask/addTaskService");
 const deleteTaskService = require("./useCases/Task/deleteTask/deleteTaskService");
 const toggleDoneTaskService = require("./useCases/Task/toggleDoneTask/toggleDoneTaskService");
+const editTaskService = require("./useCases/Task/editTask/editTaskService");
 
 app.use(
   cors({
@@ -72,10 +73,34 @@ app.delete("/tasks/:id", (req, res) => {
   res.json(tasks);
 });
 
-app.patch("/tasks/:id", (req, res) => {
+app.patch("/tasks/done/:id", (req, res) => {
   const { id } = req.params;
 
   tasks = toggleDoneTaskService(tasks, parseInt(id));
+
+  res.json(tasks);
+});
+
+app.patch("/tasks/:id", (req, res) => {
+  const { id } = req.params;
+
+  const missingFields = validateRequestBody(req.body, ["title", "description"]);
+
+  if (missingFields.length > 0) {
+    res.status(400).json({
+      type: "MissingFields",
+      message: `Missing fields: ${missingFields.join(", ")}`,
+      missingFields,
+    });
+
+    return;
+  }
+
+  tasks = editTaskService({
+    tasks,
+    taskId: parseInt(id),
+    body: req.body,
+  });
 
   res.json(tasks);
 });
