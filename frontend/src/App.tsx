@@ -47,7 +47,7 @@ function App() {
       if (response.status === 400) {
         const errorData = await response.json();
 
-        if (errorData.type === "MissingFields") {
+        if (errorData.type === "missing_fields") {
           errorData.missingFields.forEach((field: "title" | "description") => {
             setError(field, {
               type: "manual",
