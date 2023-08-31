@@ -70,41 +70,42 @@ Follow the steps below to install the **Duda Integration** project:
 
 1. **Cloning the Repository:**
 
-   ```bash
-   git clone https://github.com/lcsflrs/integration-engineer-take-home.git
-   cd integration-engineer-take-home
-   ```
+```bash
+git clone https://github.com/lcsflrs/integration-engineer-take-home.git
+cd integration-engineer-take-home
+```
 
 2. **Installing Dependencies:**
-   ```bash
-   yarn install
-   ```
+
+```bash
+yarn install
+```
 
 ## Testing and Running
 
 To test the project, use the following command:
 
-    ```bash
-    yarn test
-    ```
+```bash
+yarn test
+```
 
 To run the project, use the following command:
 
-    ```bash
-    yarn dev
-    ```
+```bash
+yarn dev
+```
 
 As this project is a monorepo, you can run the backend and frontend separately. To run the backend, use the following command:
 
-    ```bash
-    yarn backend dev
-    ```
+```bash
+yarn backend dev
+```
 
 To run the frontend, use the following command:
 
-    ```bash
-    yarn frontend dev
-    ```
+```bash
+yarn frontend dev
+```
 
 ## API Documentation
 
