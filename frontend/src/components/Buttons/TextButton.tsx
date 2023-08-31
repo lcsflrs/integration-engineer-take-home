@@ -6,16 +6,22 @@ interface TextButtonProps {
   className?: string;
 }
 const TextButton = ({ onClick, text, className }: TextButtonProps) => {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    onClick();
+  };
+
   return (
-    <button
+    <a
+      href=""
       className={twMerge(
-        "hover:text-brand-purple  transition-all  rounded-lg py-2 px-4 bg-transparent text-white font-semibold",
+        "hover:text-brand-purple flex items-center transition-all rounded-lg py-2 px-4 bg-transparent text-white font-semibold",
         className
       )}
-      onClick={onClick}
+      onClick={handleClick}
     >
       {text}
-    </button>
+    </a>
   );
 };
 
