@@ -1,4 +1,15 @@
-const editTaskService = (dto) => {
+import { ITask } from "../../../@types";
+
+interface DTO {
+  tasks: ITask[];
+  taskId: number;
+  body: {
+    title: string;
+    description: string;
+  };
+}
+
+const editTaskService = (dto: DTO) => {
   const { tasks, taskId, body } = dto;
 
   const taskIndex = tasks.findIndex((task) => task.id === taskId);

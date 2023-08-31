@@ -1,3 +1,5 @@
+import { ITask } from "./@types";
+
 const express = require("express");
 const bodyParser = require("body-parser");
 
@@ -17,7 +19,7 @@ app.use(bodyParser.json());
 
 const taskRoutes = require("./useCases/Task/taskRoutes");
 
-let tasks = [];
+let tasks: ITask[] = [];
 let nextTaskId = 1;
 
 app.use("/tasks", taskRoutes(tasks, nextTaskId));

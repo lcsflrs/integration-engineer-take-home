@@ -1,23 +1,23 @@
-const express = require("express");
-const router = express.Router();
+import { NextFunction, Request, Response } from "express";
+import { ITask } from "../../@types";
 
-const validateRequestBody = require("./../../utils/validateRequestBody");
 const getTasksService = require("./getTasks/getTasksService");
 const addTaskService = require("./addTask/addTaskService");
 const deleteTaskService = require("./deleteTask/deleteTaskService");
 const toggleDoneTaskService = require("./toggleDoneTask/toggleDoneTaskService");
 const editTaskService = require("./editTask/editTaskService");
+const validateRequestBody = require("../../utils/validateRequestBody");
 
-module.exports = (tasks, nextTaskId) => {
+module.exports = (tasks: ITask[], nextTaskId: number) => {
   const express = require("express");
   const router = express.Router();
 
-  router.get("/", (req, res, next) => {
+  router.get("/", (req: Request, res: Response, next: NextFunction) => {
     const returnTasks = getTasksService(tasks);
     res.json(returnTasks);
   });
 
-  router.post("/", (req, res, next) => {
+  router.post("/", (req: Request, res: Response, next: NextFunction) => {
     try {
       const missingFields = validateRequestBody(req.body, [
         "title",
@@ -52,7 +52,7 @@ module.exports = (tasks, nextTaskId) => {
     }
   });
 
-  router.delete("/:id", (req, res, next) => {
+  router.delete("/:id", (req: Request, res: Response, next: NextFunction) => {
     tasks = deleteTaskService({
       tasks,
       taskId: parseInt(req.params.id),
@@ -61,20 +61,23 @@ module.exports = (tasks, nextTaskId) => {
     res.json(tasks);
   });
 
-  router.patch("/done/:id", (req, res, next) => {
-    const { id } = req.params;
+  router.patch(
+    "/done/:id",
+    (req: Request, res: Response, next: NextFunction) => {
+      const { id } = req.params;
 
-    const dto = {
-      tasks,
-      taskId: parseInt(id, 10),
-    };
+      const dto = {
+        tasks,
+        taskId: parseInt(id, 10),
+      };
 
-    tasks = toggleDoneTaskService(dto);
+      tasks = toggleDoneTaskService(dto);
 
-    res.json(tasks);
-  });
+      res.json(tasks);
+    }
+  );
 
-  router.patch("/:id", (req, res, next) => {
+  router.patch("/:id", (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
     const missingFields = validateRequestBody(req.body, [
