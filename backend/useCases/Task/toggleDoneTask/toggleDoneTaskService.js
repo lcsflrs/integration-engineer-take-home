@@ -4,7 +4,9 @@
  * @param {number} taskId - The ID of the task to be updated.
  * @returns {Array} - The updated array of tasks.
  */
-const toggleDoneTaskService = (tasks, taskId) => {
+const toggleDoneTaskService = (dto) => {
+  const { tasks, taskId } = dto;
+
   const task = tasks.find((task) => task.id === taskId);
 
   if (!task) {

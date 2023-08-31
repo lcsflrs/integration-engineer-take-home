@@ -17,11 +17,11 @@ const addTaskService = (dto) => {
     done: false,
   };
 
-  dto.tasks.push(newTask);
+  const updatedTasks = [...dto.tasks, newTask];
   const nextTaskId = dto.nextTaskId + 1;
 
   return {
-    tasks: dto.tasks,
+    tasks: updatedTasks,
     nextTaskId,
   };
 };
