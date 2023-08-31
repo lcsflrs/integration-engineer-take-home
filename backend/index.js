@@ -10,6 +10,7 @@ const validateRequestBody = require("./utils/validateRequestBody");
 const getTasksService = require("./useCases/Task/getTasks/getTasksService");
 const addTaskService = require("./useCases/Task/addTask/addTaskService");
 const deleteTaskService = require("./useCases/Task/deleteTask/deleteTaskService");
+const toggleDoneTaskService = require("./useCases/Task/toggleDoneTask/toggleDoneTaskService");
 
 app.use(
   cors({
@@ -67,6 +68,14 @@ app.delete("/tasks/:id", (req, res) => {
     tasks,
     taskId: parseInt(req.params.id),
   });
+
+  res.json(tasks);
+});
+
+app.patch("/tasks/:id", (req, res) => {
+  const { id } = req.params;
+
+  tasks = toggleDoneTaskService(tasks, parseInt(id));
 
   res.json(tasks);
 });
