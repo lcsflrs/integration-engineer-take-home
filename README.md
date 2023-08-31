@@ -61,8 +61,8 @@ Welcome to the installation and usage documentation for the **Duda Integration**
 
 Before proceeding, make sure your system meets the following requirements:
 
-- Node.js: v18.13.0
-- Yarn: v1.22.19
+- Node.js: v18.13.0 - Click [here](https://nodejs.org/en/download/) to download.
+- Yarn: v1.22.19 - Click [here](https://classic.yarnpkg.com/en/docs/install/#windows-stable) to download.
 
 ## Installation
 
